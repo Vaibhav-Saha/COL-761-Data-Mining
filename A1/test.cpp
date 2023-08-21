@@ -25,7 +25,7 @@ static inline void trim(std::string &s) {
 int main(){
 
     ifstream a_data("medium_set.dat");
-    ifstream c_data("medium1.dat");
+    ifstream c_data("m1.dat");
     ofstream result("output_file.dat");
     string str;
 

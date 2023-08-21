@@ -80,6 +80,7 @@ vector<Transaction> compress(vector<pair<int,set<Item>>> &freq, Item input_file,
         }
 
         data_out.push_back(ans);
+        Transactions.push_back(vec);
     }
     
     //writing to new file
@@ -99,7 +100,7 @@ vector<Transaction> compress(vector<pair<int,set<Item>>> &freq, Item input_file,
 
     }
     for(int i=0;i<data_out.size();i++){
-        result<< data_out[i]<<endl;
+        result<<data_out[i]<<endl;
         damdam<<data_out[i]<<endl;
     }
 
@@ -126,20 +127,20 @@ void multi_compress(Item input_file, Item output_file){
         transactions.push_back(vec);
     }
 
-    int percentage = 90;
+    double percentage = 90;
     int cnt=-1;
     Item damru = "damru.dat";
     map<string,set<string>> mapping;
-    while(percentage>1){
-        cout<<"fghj"<<endl;
+    while(percentage>0.01){
+        // cout<<"fghj"<<endl;
         unsigned long long minimum_support_threshold = num_lines*percentage/100;
         FPTree fptree{ transactions, minimum_support_threshold };
         std::set<Pattern> Freq1 = fptree_growth( fptree );
         vector<pair<int,set<Item>>> freq = converter(Freq1);
 
-        transactions=compress(freq, input_file, output_file, cnt,mapping);
+        transactions =compress(freq, input_file, output_file, cnt,mapping);
         input_file = damru;
-        percentage-=5;
+        percentage*=0.8;
     
     }
 
