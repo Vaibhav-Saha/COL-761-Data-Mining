@@ -3,20 +3,18 @@ using namespace std;
 
 #include "fptree.hpp"
 
-void compress(vector<pair<int,set<Item>>> &freq, string input_file, string output_file){
+void compress(vector<pair<int,set<Item>>> &freq, Item input_file, Item output_file){
     ifstream data(input_file);
     ofstream result(output_file);
-    string str;
+    Item str;
 
-
-    
     int size_freq = freq.size();
     map<string,set<string>> mapping;
     vector<string> data_out;
     int buffer = 0;
     while(getline(data,str)){
         stringstream ss(str);
-        string num;
+        Item num;
 
         unordered_map<string,int> maps={};
         while(ss>>num){
@@ -24,7 +22,7 @@ void compress(vector<pair<int,set<Item>>> &freq, string input_file, string outpu
         }
 
         int cnt=-1;
-        string ans="";
+        Item ans="";
         for(int i=size_freq-1;i>=0;i--){
             set<string> s = freq[i].second;
             bool pos=true;
@@ -54,9 +52,10 @@ void compress(vector<pair<int,set<Item>>> &freq, string input_file, string outpu
         // result<<ans<<endl;
         data_out.push_back(ans);
     }
+    
     result<< to_string(mapping.size())<<endl;
     for(auto it=mapping.begin();it!=mapping.end();it++){
-        string ans= (*it).first +" : ";
+        Item ans= (*it).first +" : ";
         set<string> &s = (*it).second;
         for(auto a: s){
             ans+= a +" ";
@@ -71,10 +70,10 @@ void compress(vector<pair<int,set<Item>>> &freq, string input_file, string outpu
     
 }
 
-void decompress( string input_file, string output_file){
+void decompress( Item input_file, Item output_file){
     ifstream data(input_file);
     ofstream result(output_file);
-    string str;
+    Item str;
 
     int cnt= (getline(data,str)) ? stoi(str):0;
     map<string,set<string>> mapping;
@@ -82,9 +81,9 @@ void decompress( string input_file, string output_file){
     while(cnt>0 && getline(data,str)){
         cnt--;
         stringstream ss(str);
-        string num;
-        string ans ="";
-        string id;
+        Item num;
+        Item ans ="";
+        Item id;
         ss>>id;
         set<string> s;
         mapping[id] = s;
@@ -105,8 +104,8 @@ void decompress( string input_file, string output_file){
 
     while(getline(data,str)){
         stringstream ss(str);
-        string num;
-        string ans ="";
+        Item num;
+        Item ans ="";
         while(ss>>num){
             if(stoi(num)>=0){
                 ans+= num +" ";
@@ -123,7 +122,7 @@ void decompress( string input_file, string output_file){
     
 }
 
-bool static cmp(pair<int,set<string>> &a, pair<int,set<string>> &b){
+bool static cmp(pair<int,set<string>> a, pair<int,set<string>> b){
     return a.first<b.first;
 }
 
@@ -131,6 +130,9 @@ vector<pair<int,set<Item>>> converter(set<pair<set<Item>,uint64_t>> freq){
 
     vector<pair<int,set<Item>>> ans={};
     for(auto i : freq){
+        if(i.first.size()==1){
+            continue;
+        }
         ans.push_back(make_pair(i.first.size(),i.first));
     }
     sort(ans.begin(),ans.end(),cmp);
@@ -139,51 +141,43 @@ vector<pair<int,set<Item>>> converter(set<pair<set<Item>,uint64_t>> freq){
 }
 
 
-
 int main(int argc, char* argv[]) {
     if (argc != 4) {
         cerr << "Usage: " << argv[0] << " <C> <input_file> <output_file>" << endl;
         return 1;
     }
 
-    string command = argv[1];
-    string input_file = argv[2];
-    string output_file = argv[3];
-
-
+    Item command = argv[1];
+    Item input_file = argv[2];
+    Item output_file = argv[3];
 
     Item item;
     vector<Transaction> transactions;
     ifstream data(input_file);
     // ofstream result(output_file);
-    string str;
-
+    Item str;
+    long long count=0;
     while(getline(data,item)){
         vector<Item> vec;
         stringstream itemset(item);
-        string s;
-
+        Item s;
+        count++;
         while(itemset>>s){
             vec.push_back(s);
         }
         transactions.push_back(vec);
     }
 
-    const uint64_t minimum_support_threshold = 2;
+    const uint64_t minimum_support_threshold = count*90/100;
 
     const FPTree fptree{ transactions, minimum_support_threshold };
 
     const std::set<Pattern> Freq1 = fptree_growth( fptree );
 
-    // set<pair<set<string>,uint64_t>> Freq1 = 
-
     vector<pair<int,set<Item>>> freq = converter(Freq1);
-    int a=1;
         
-    // map<string,set<string>> mapping;
     if(command=="C"){
         compress(freq, input_file, output_file);
-        // cout<<"sdgsg";
     }else{
         decompress( input_file, output_file);
     }
