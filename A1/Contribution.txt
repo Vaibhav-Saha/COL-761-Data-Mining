@@ -1,0 +1,6 @@
+Team Name: Rishabh Sama 
+Member 1: Rishabh Verma 2020CS50123 , contribution 33%
+Member 2: Harshit Kumar 2020CS10347 , contribution 33%
+Member 3: vaibhav Saha 2020CS10403 , contribution 33%
+
+We have used the implementation of FPtree from this source : LINK: https://github.com/integeruser/FP-growth/tree/master
