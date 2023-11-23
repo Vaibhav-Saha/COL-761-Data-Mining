@@ -60,9 +60,9 @@ def main():
     plt.ylabel('Average Ratio of Farthest to Nearest Distances')
     plt.title('Average Ratio of Farthest to Nearest Distances vs. Dimension')
     plt.legend()
-    # plt.yscale('log')  # Set y-axis to logarithmic scale
-    plt.savefig(f'average_ratios_plot_dimensions4_logscale.png')
-    # plt.show()
+    plt.yscale('log')  # Set y-axis to logarithmic scale
+    # plt.savefig(f'average_ratios_plot_dimensions4_logscale.png')
+    plt.show()
     plt.close()
 
 if __name__ == "__main__":
